@@ -77,7 +77,7 @@ void NE_printInfo(struct NE_exe exe) {
     );
 
     printf(
-        "Target OS: %s (%u)\n",
+        "Target OS: %s [#%u]\n",
         NE_detectOS(exe.header.targOS),
         exe.header.targOS
     );
