@@ -100,12 +100,12 @@ enum apptype {
 
 //Target Operating System
 enum targetos {
-    unknown,    //Obvious ;)
-    os2,        //OS/2 (as if you hadn't worked that out!)
-    win,        //Windows (Win16)
-    dos4,       //European DOS  4.x
-    win386,     //Windows for the 80386 (Win32s). 32 bit code.
-    BOSS        //The boss, a.k.a Borland Operating System Services
+    os_unknown, //Obvious ;)
+    os_os2,     //OS/2 (as if you hadn't worked that out!)
+    os_win,     //Windows (Win16)
+    os_dos4,    //European DOS  4.x
+    os_win386,  //Windows for the 80386 (Win32s). 32 bit code.
+    os_BOSS     //The boss, a.k.a Borland Operating System Services
 };
 
 //Resource Types

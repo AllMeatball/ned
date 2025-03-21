@@ -55,15 +55,15 @@ int NE_readFile(FILE *fp, struct NE_exe *exe) {
 
 const char *NE_detectOS(enum targetos os) {
     switch (os) {
-        case os2:
+        case os_os2:
             return "OS/2";
-        case win:
+        case os_win:
             return "Windows (16-bit)";
-        case dos4:
+        case os_dos4:
             return "MS-DOS 4.0 (Europe)";
-        case win386:
+        case os_win386:
             return "Windows (32-bit)";
-        case unknown:
+        case os_unknown:
         default:
             return "Unknown";
     }
