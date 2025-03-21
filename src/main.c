@@ -9,6 +9,10 @@ int main(int argc, char **argv) {
     }
 
     FILE *fp = fopen(argv[1], "rb");
+    if (!fp) {
+        perror("Failed open exe file");
+        return 1;
+    }
 
     if (NE_readFile(fp, &exe) < 0) {
         fprintf(
