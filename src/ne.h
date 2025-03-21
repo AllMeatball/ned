@@ -107,6 +107,22 @@ enum targetos {
     win386,     //Windows for the 80386 (Win32s). 32 bit code.
     BOSS        //The boss, a.k.a Borland Operating System Services
 };
+
+//Resource Types
+enum restype {
+    rt_unknown = 0,
+    rt_cursor,      //Cursor
+    rt_bitmap,      //Bitmap
+    rt_icon,        //Icon
+    rt_menu,        //Menu
+    rt_dialog,      //Dialog box
+    rt_string,      //String table
+    rt_fontdir,     //Font component
+    rt_font,        //Font directory
+    rt_accelerator, //Accelerator table
+    rt_rcdata       //Resource data
+};
+
 //Other OS/2 flags
 #define LFN 1        //OS/2 Long File Names (finally, no more 8.3 conversion :) )
 #define PMODE 1<<1   //OS/2 2.x Protected Mode executable
