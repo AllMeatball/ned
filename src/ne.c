@@ -7,6 +7,7 @@
 
 int NE_readHeader(FILE *fp, struct NE_exe *exe) {
     char mz_header[2];
+    exe->ready = 0;
     exe->error = "Unknown";
 
     if (!fp) {
@@ -49,6 +50,7 @@ int NE_readHeader(FILE *fp, struct NE_exe *exe) {
         return -1;
     }
 
+    exe->ready = 1;
     exe->error = "Success";
     return 0;
 }
@@ -75,6 +77,8 @@ const char *NE_detectOS(enum targetos os) {
 }
 
 void NE_printInfo(struct NE_exe exe) {
+    if (!exe.ready) { return; }
+
     printf(
         "Linker version: %u.%u\n",
         exe.header.MajLinkerVersion,

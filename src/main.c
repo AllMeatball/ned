@@ -21,12 +21,14 @@ int main(int argc, char **argv) {
             exe.error
         );
 
-        fclose(fp);
-        return 0;
+        goto exit_prog;
     }
 
+exit_prog:
     NE_printInfo(exe);
 
-    fclose(fp);
+    if (fp)
+        fclose(fp);
+
     return 0;
 }

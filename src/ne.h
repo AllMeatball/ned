@@ -171,6 +171,7 @@ enum restype {
 // Custom structs for NEd
 
 struct NE_exe {
+    int ready;
     const char *error;
     struct NE_header header;
 };
