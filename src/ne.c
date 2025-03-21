@@ -5,7 +5,7 @@
 
 #define NE_PTR_OFFSET 0x3c
 
-int NE_readFile(FILE *fp, struct NE_exe *exe) {
+int NE_readHeader(FILE *fp, struct NE_exe *exe) {
     char mz_header[2];
     exe->error = "Unknown";
 
@@ -51,6 +51,11 @@ int NE_readFile(FILE *fp, struct NE_exe *exe) {
 
     exe->error = "Success";
     return 0;
+}
+
+int NE_readFile(FILE *fp, struct NE_exe *exe) {
+    int ret = NE_readHeader(fp, exe);
+    return ret;
 }
 
 const char *NE_detectOS(enum targetos os) {
