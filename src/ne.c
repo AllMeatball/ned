@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define NE_PTR_OFFSET 0x3c
 
@@ -76,6 +77,8 @@ const char *NE_detectOS(enum targetos os) {
         default:
             return "Unknown";
     }
+    fprintf(stderr, "somehow the program failed and went here. ask the developer about %s:%d\n", __func__, __LINE__);
+    abort();
 }
 
 void NE_printInfo(struct NE_exe exe) {
