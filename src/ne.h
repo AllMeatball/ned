@@ -80,6 +80,7 @@ typedef struct {
 struct NE_ResNameInfo {
     uint16_t Offset;
     uint16_t Length;
+    uint16_t Flags;
     uint16_t ID;
     uint16_t Handle;
     uint16_t Usage;
