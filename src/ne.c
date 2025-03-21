@@ -34,11 +34,6 @@ int NE_readHeader(FILE *fp, struct NE_exe *exe) {
         return -1;
     }
 
-    if (fseek(fp, NE_PTR_OFFSET, SEEK_SET) != 0) {
-        exe->error = "Failed to seek to NE pointer offset";
-        return -1;
-    }
-
     // now get the NE header
     if (fseek(fp, ne_ptr, SEEK_SET) != 0) {
         exe->error = "Failed to seek to NE header";
