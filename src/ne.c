@@ -28,7 +28,7 @@ int NE_readFile(FILE *fp, struct NE_exe *exe) {
         return -1;
     }
 
-    if (fread(&ne_ptr, 4, 1, fp) < 1) {
+    if (fread(&ne_ptr, 2, 1, fp) < 1) {
         exe->error = "Failed to read NE pointer offset";
         return -1;
     }
