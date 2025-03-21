@@ -1,6 +1,6 @@
 OBJ = \
-	build/main.o \
-	build/ne.o \
+	src/main.o \
+	src/ne.o \
 
 LDFLAGS = -g
 CFLAGS = -g
@@ -16,4 +16,4 @@ all: ned
 
 .PHONY: clean
 clean:
-	rm -rf build/*.o
+	rm -rf src/*.o build/ned

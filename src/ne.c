@@ -1,4 +1,5 @@
 #include "ne.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -52,11 +53,33 @@ int NE_readFile(FILE *fp, struct NE_exe *exe) {
     return 0;
 }
 
+const char *NE_detectOS(enum targetos os) {
+    switch (os) {
+        case os2:
+            return "OS/2";
+        case win:
+            return "Windows (16-bit)";
+        case dos4:
+            return "MS-DOS 4.0 (Europe)";
+        case win386:
+            return "Windows (32-bit)";
+        case unknown:
+        default:
+            return "Unknown";
+    }
+}
+
 void NE_printInfo(struct NE_exe exe) {
     printf(
         "Linker version: %u.%u\n",
         exe.header.MajLinkerVersion,
         exe.header.MinLinkerVersion
+    );
+
+    printf(
+        "Target OS: %s (%u)\n",
+        NE_detectOS(exe.header.targOS),
+        exe.header.targOS
     );
 }
 
