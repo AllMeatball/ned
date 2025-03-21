@@ -76,6 +76,43 @@ typedef struct {
     uint16_t    MinAlloc;   // Minimum number of bytes to allocate.
 }NE_SegEnt;
 
+// Resource name info
+struct NE_ResNameInfo {
+    uint16_t Offset;
+    uint16_t Length;
+    uint16_t ID;
+    uint16_t Handle;
+    uint16_t Usage;
+};
+
+// Resource table entry
+typedef struct {
+    uint16_t TypeID;
+    uint16_t ResourceCount;
+    uint32_t Reserved;
+    struct NE_ResNameInfo *NameInfo;
+}NE_ResType;
+
+
+// Resource table
+typedef struct {
+    size_t      len;
+    NE_ResType  *array;
+}NE_ResTypeArr;
+
+// Resource table
+typedef struct {
+    size_t len;
+    char   **array;
+}NE_ResNames;
+
+// Resource table
+struct NE_ResTable {
+    uint16_t    AlignmentShift; // Alignment shift count for resource data.
+    NE_ResTypeArr Types;
+    NE_ResNames Names;
+};
+
 #define GLOBINIT 1<<2     //global initialization
 #define PMODEONLY 1<<3    //Protected mode only
 #define INSTRUC86 1<<4    //8086 instructions
@@ -110,7 +147,8 @@ enum targetos {
 
 //Resource Types
 enum restype {
-    rt_unknown = 0,
+    rt_unknown = -1,
+    rt_terminator,  //Marks the end of a TYPEINFO list
     rt_cursor,      //Cursor
     rt_bitmap,      //Bitmap
     rt_icon,        //Icon
