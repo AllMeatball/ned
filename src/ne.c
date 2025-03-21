@@ -45,6 +45,11 @@ int NE_readHeader(FILE *fp, struct NE_exe *exe) {
         return -1;
     }
 
+    if (memcmp("NE", exe->header.sig, 2) != 0) {
+        exe->error = "Not a New Executable formatted exe file";
+        return -1;
+    }
+
     exe->ready = 1;
     exe->error = "Success";
     return 0;
@@ -65,6 +70,8 @@ const char *NE_detectOS(enum targetos os) {
             return "MS-DOS 4.0 (Europe)";
         case os_win386:
             return "Windows (32-bit)";
+        case os_BOSS:
+            return "Borland Operating System Services";
         case os_unknown:
         default:
             return "Unknown";
