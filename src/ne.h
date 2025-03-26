@@ -98,13 +98,13 @@ typedef struct {
 // Resource table
 typedef struct {
     size_t      len;
-    NE_ResType  *array;
+    NE_ResType  *items;
 }NE_ResTypeArr;
 
 // Resource table
 typedef struct {
     size_t len;
-    char   **array;
+    char   **items;
 }NE_ResNames;
 
 // Resource table
