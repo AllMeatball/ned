@@ -24,8 +24,9 @@ int main(int argc, char **argv) {
         goto exit_prog;
     }
 
-exit_prog:
     NE_printInfo(exe);
+exit_prog:
+    NE_freeExe(&exe);
 
     if (fp)
         fclose(fp);

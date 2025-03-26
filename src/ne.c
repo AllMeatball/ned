@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "arrayutil.h"
+
 #define NE_PTR_OFFSET 0x3c
 
 int NE_readHeader(FILE *fp, struct NE_exe *exe) {
@@ -56,9 +58,69 @@ int NE_readHeader(FILE *fp, struct NE_exe *exe) {
     return 0;
 }
 
+int NE_readRsrcTable(FILE *fp, struct NE_exe *exe) {
+    if (!exe->ready) {
+        exe->error = "Exe struct isn't setup/ready yet";
+        return -1;
+    }
+
+    // seek to resource table
+    if (fseek(fp, exe->header.ResTableOffset, SEEK_SET) != 0) {
+        exe->error = "Failed to seek to resource table";
+        return -1;
+    }
+
+    // read alignment shift value
+    if (fread(
+        &exe->rsrc.AlignmentShift,
+        sizeof(exe->rsrc.AlignmentShift),
+        1, fp) < 1
+    ) {
+        exe->error = "Failed to read alignment shift";
+        return -1;
+    }
+
+    // read list of types
+    ArrayUtil_create(exe->rsrc.Types);
+
+    NE_ResType res_type = {0};
+
+    // use 0xCAFE because we don't want it prematurely exit
+    res_type.TypeID = 0xCAFE;
+
+    while (res_type.TypeID != rt_terminator) {
+        if (fread(&res_type.TypeID, sizeof(res_type.TypeID), 1, fp) < 1) {
+            exe->error = "Failed to read type id (likely got to EOF)";
+            return -1;
+        }
+
+        if (res_type.TypeID == rt_terminator) {
+            break;
+        }
+
+        if (fread(&res_type.metadata, sizeof(res_type.metadata), 1, fp) < 1) {
+            exe->error = "Failed to read metadata for type";
+            return -1;
+        }
+
+        ArrayUtil_add(exe->rsrc.Types, res_type);
+    }
+
+    // ArrayUtil_create(exe->rsrc.Names);
+    return 0;
+}
+
 int NE_readFile(FILE *fp, struct NE_exe *exe) {
-    int ret = NE_readHeader(fp, exe);
+    int ret = 0;
+
+    ret |= NE_readHeader(fp, exe);
+    ret |= NE_readRsrcTable(fp, exe);
     return ret;
+}
+
+void NE_freeExe(struct NE_exe *exe) {
+    ArrayUtil_free(exe->rsrc.Names);
+    ArrayUtil_free(exe->rsrc.Types);
 }
 
 const char *NE_detectOS(enum targetos os) {

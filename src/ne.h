@@ -89,9 +89,12 @@ struct NE_ResNameInfo {
 // Resource table entry
 typedef struct {
     uint16_t TypeID;
+
+    struct {
     uint16_t ResourceCount;
     uint32_t Reserved;
     struct NE_ResNameInfo *NameInfo;
+    } metadata;
 }NE_ResType;
 
 
@@ -174,7 +177,9 @@ struct NE_exe {
     int ready;
     const char *error;
     struct NE_header header;
+    struct NE_ResTable rsrc;
 };
 
 int NE_readFile(FILE *fp, struct NE_exe *exe);
 void NE_printInfo(struct NE_exe exe);
+void NE_freeExe(struct NE_exe *exe);
