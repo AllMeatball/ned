@@ -1,3 +1,4 @@
 build/
 *.o
 *.kate-swp
+*kateproject.build
