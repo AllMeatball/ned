@@ -1,4 +1,4 @@
-# NEd - Resource viewer for old Windows programs (e.g. 3.x and 9x)
+# NEd - Resource viewer for old Windows programs (3.xx and 9x)
 
 ### Dependices
 * Make
