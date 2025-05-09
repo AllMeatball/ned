@@ -3,6 +3,33 @@
 #include <stdio.h>
 #include <stdint.h>
 
+//
+// In 16-bit DOS/Windows terminology, DGROUP is a segment class that referring
+// to segments that are used for data.
+//
+// Win16 used segmentation to permit a DLL or program to have multiple
+// instances along with an instance handle and manage multiple data
+// segments. This allowed one NOTEPAD.EXE code segment to execute
+// multiple instances of the notepad application.
+//
+enum FlagWord {
+    NOAUTODATA,     //
+    SINGLEDATA,
+    MULTIPLEDATA,
+    LINKERROR = 0x2000, // Linker error, module cannot lode
+    LIBMODULE = 0x8000
+    // The file is a DLL/Library. NE_header.InitStack
+    // is therefore invalid (DLLs are libraries) so they
+    // do not get their own stacks. CS:IP points to
+    // the load procedure.
+};
+
+// The type is a 3-bit integer or'ed together with the other flags.
+#define SEGFLAGS_HAS_RELOCS 0x0100
+#define SEGFLAGS_DISCARD    0xF000
+#define SEGFLAGS_TYPE_CODE  0
+#define SEGFLAGS_TYPE_DATA  1
+
 struct NE_header {
     char sig[2];                 // {'N', 'E'}
     uint8_t MajLinkerVersion;    //The major linker version
@@ -41,32 +68,7 @@ struct NE_header {
     uint8_t expctwinver[2];      //Expected windows version (minor first)
 };
 
-//
-// In 16-bit DOS/Windows terminology, DGROUP is a segment class that referring
-// to segments that are used for data.
-//
-// Win16 used segmentation to permit a DLL or program to have multiple
-// instances along with an instance handle and manage multiple data
-// segments. This allowed one NOTEPAD.EXE code segment to execute
-// multiple instances of the notepad application.
-//
-enum FlagWord {
-    NOAUTODATA,     //
-    SINGLEDATA,
-    MULTIPLEDATA,
-    LINKERROR = 0x2000, // Linker error, module cannot lode
-    LIBMODULE = 0x8000
-    // The file is a DLL/Library. NE_header.InitStack
-    // is therefore invalid (DLLs are libraries) so they
-    // do not get their own stacks. CS:IP points to
-    // the load procedure.
-};
-
-// The type is a 3-bit integer or'ed together with the other flags.
-#define SEGFLAGS_HAS_RELOCS 0x0100
-#define SEGFLAGS_DISCARD    0xF000
-#define SEGFLAGS_TYPE_CODE  0
-#define SEGFLAGS_TYPE_DATA  1
+#pragma pack(push,1)
 
 // Segment table entry
 typedef struct {
@@ -93,29 +95,40 @@ typedef struct {
     struct {
     uint16_t ResourceCount;
     uint32_t Reserved;
-    struct NE_ResNameInfo *NameInfo;
     } metadata;
+
+    struct NE_ResNameInfo *NameInfo;
 }NE_ResType;
 
 
 // Resource table
-typedef struct {
-    size_t      len;
-    NE_ResType  *items;
-}NE_ResTypeArr;
-
-// Resource table
-typedef struct {
-    size_t len;
-    char   **items;
-}NE_ResNames;
+// typedef struct {
+//     size_t      len;
+//     NE_ResType  *items;
+// }NE_ResTypeArr;
+//
+// // Resource table
+// typedef struct {
+//     size_t len;
+//     char   **items;
+// }NE_ResNames;
 
 // Resource table
 struct NE_ResTable {
     uint16_t    AlignmentShift; // Alignment shift count for resource data.
-    NE_ResTypeArr Types;
-    NE_ResNames Names;
+    NE_ResType *Types;
+    char **Names;
 };
+
+// Custom structs for NEd
+
+struct NE_exe {
+    int ready;
+    const char *error;
+    struct NE_header header;
+    struct NE_ResTable rsrc;
+};
+#pragma pack(pop)
 
 #define GLOBINIT 1<<2     //global initialization
 #define PMODEONLY 1<<3    //Protected mode only
@@ -170,15 +183,6 @@ enum restype {
 #define PMODE 1<<1   //OS/2 2.x Protected Mode executable
 #define PFONT 1<<2   //OS/2 2.x Proportional Fonts
 #define GANGL 1<<3   //OS/2 Gangload area
-
-// Custom structs for NEd
-
-struct NE_exe {
-    int ready;
-    const char *error;
-    struct NE_header header;
-    struct NE_ResTable rsrc;
-};
 
 int NE_readFile(FILE *fp, struct NE_exe *exe);
 void NE_printInfo(struct NE_exe exe);
