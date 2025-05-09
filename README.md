@@ -20,7 +20,7 @@ ned.exe [exe file]
 ```
 
 Currently this will only display info about the app.
-and the resources list is buggy due incompelete
+and the resources list is buggy due incompelete understanding of the format.
 
 ## License
 Copyright (c) 2015 AllMeatball
