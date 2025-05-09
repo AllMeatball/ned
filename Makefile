@@ -9,6 +9,7 @@ CFLAGS = -g
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 ned: $(OBJ)
+	mkdir -p build/
 	$(CC) $^ $(LDFLAGS) -o build/$@
 
 .PHONY: all
