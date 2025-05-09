@@ -1,10 +1,13 @@
 # NEd - Resource viewer for old Windows programs (e.g. 3.x and 9x)
 
-## Building
-
 ### Dependices
 * Make
-* A 
+* GCC or Clang
+
+### Building
+1. Enter folder of the repo
+2. Run `make`
+3. Continue to next section
 
 ### Running
 ```
