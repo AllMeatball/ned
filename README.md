@@ -7,7 +7,8 @@
 ### Building
 1. Enter folder of the repo
 2. Run `make`
-3. Continue to next section
+3. Enter the newly created `build` directory
+4. Continue to next section
 
 ### Running
 ```
